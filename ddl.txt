@@ -1,0 +1,369 @@
+SQL> create table dept(id number(7) primary key,name varchar2(25));
+
+Table created.
+
+SQL> desc dept;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL NUMBER(7)
+ NAME                                               VARCHAR2(25)
+
+SQL> desc departments;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPARTMENT_ID                             NOT NULL NUMBER(4)
+ DEPARTMENT_NAME                           NOT NULL VARCHAR2(30)
+ MANAGER_ID                                         NUMBER(6)
+ LOCATION_ID                                        NUMBER(4)
+
+SQL> spool off
+SQL> insert into dept
+  2  select department_id,department_name
+  3  frpm departments;
+frpm departments
+     *
+ERROR at line 3:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> insert into dept
+  2  select department_id,department_name
+  3  from departments;
+
+28 rows created.
+
+SQL> create table emp
+  2  (id number(7),last_name varchar2(25),first_name varchar2(25),dept_id);
+(id number(7),last_name varchar2(25),first_name varchar2(25),dept_id)
+                                                             *
+ERROR at line 2:
+ORA-02263: need to specify the datatype for this column 
+
+
+SQL> create table emp
+  2  (id number(7),last_name varchar2(25),first_name varchar2(25),dept_id number(7));
+
+Table created.
+
+SQL> desc dept;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL NUMBER(7)
+ NAME                                               VARCHAR2(25)
+
+SQL> desc emp;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                                 NUMBER(7)
+ LAST_NAME                                          VARCHAR2(25)
+ FIRST_NAME                                         VARCHAR2(25)
+ DEPT_ID                                            NUMBER(7)
+
+SQL> create table employees2
+  2  as select employee_id id,first_name,last_name,salary,department_id dept_id
+  3  from employees;
+
+Table created.
+
+SQL> desc employees;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPLOYEE_ID                               NOT NULL NUMBER(6)
+ FIRST_NAME                                         VARCHAR2(20)
+ LAST_NAME                                 NOT NULL VARCHAR2(25)
+ EMAIL                                     NOT NULL VARCHAR2(25)
+ PHONE_NUMBER                                       VARCHAR2(20)
+ HIRE_DATE                                 NOT NULL DATE
+ JOB_ID                                    NOT NULL VARCHAR2(10)
+ SALARY                                             NUMBER(8,2)
+ COMMISSION_PCT                                     NUMBER(2,2)
+ MANAGER_ID                                         NUMBER(6)
+ DEPARTMENT_ID                                      NUMBER(4)
+
+SQL> desc employees2;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                                 NUMBER(6)
+ FIRST_NAME                                         VARCHAR2(20)
+ LAST_NAME                                 NOT NULL VARCHAR2(25)
+ SALARY                                             NUMBER(8,2)
+ DEPT_ID                                            NUMBER(4)
+
+SQL> spool off
+SQL> alter table employees2 read write;
+alter table employees2 read write
+*
+ERROR at line 1:
+ORA-14140: table HR.EMPLOYEES2 is already in read/write mode 
+
+
+SQL> desc employees2;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                                 NUMBER(6)
+ FIRST_NAME                                         VARCHAR2(20)
+ LAST_NAME                                 NOT NULL VARCHAR2(25)
+ SALARY                                             NUMBER(8,2)
+ DEPT_ID                                            NUMBER(4)
+
+SQL> drop table employees2;
+
+Table dropped.
+
+SQL> create or replace view employees_vu as
+  2  select employee_id,last_name "employee",department_id
+  3  from employees;
+
+View created.
+
+SQL> select * from employees_vu;
+
+EMPLOYEE_ID employee                  DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        100 King                                 90                             
+        101 Kochhar                              90                             
+        102 De Haan                              90                             
+        103 Hunold                               60                             
+        104 Ernst                                60                             
+        105 Austin                               60                             
+        106 Pataballa                            60                             
+        107 Lorentz                              60                             
+        108 Greenberg                           100                             
+        109 Faviet                              100                             
+        110 Chen                                100                             
+
+EMPLOYEE_ID employee                  DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        111 Sciarra                             100                             
+        112 Urman                               100                             
+        113 Popp                                100                             
+        114 Raphaely                             30                             
+        115 Khoo                                 30                             
+        116 Baida                                30                             
+        117 Tobias                               30                             
+        118 Himuro                               30                             
+        119 Colmenares                           30                             
+        120 Weiss                                50                             
+        121 Fripp                                50                             
+
+EMPLOYEE_ID employee                  DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        122 Kaufling                             50                             
+        123 Vollman                              50                             
+        124 Mourgos                              50                             
+        125 Nayer                                50                             
+        126 Mikkilineni                          50                             
+        127 Landry                               50                             
+        128 Markle                               50                             
+        129 Bissot                               50                             
+        130 Atkinson                             50                             
+        131 Marlow                               50                             
+        132 Olson                                50                             
+
+EMPLOYEE_ID employee                  DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        133 Mallin                               50                             
+        134 Rogers                               50                             
+        135 Gee                                  50                             
+        136 Philtanker                           50                             
+        137 Ladwig                               50                             
+        138 Stiles                               50                             
+        139 Seo                                  50                             
+        140 Patel                                50                             
+        141 Rajs                                 50                             
+        142 Davies                               50                             
+        143 Matos                                50                             
+
+EMPLOYEE_ID employee                  DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        144 Vargas                               50                             
+        145 Russell                              80                             
+        146 Partners                             80                             
+        147 Errazuriz                            80                             
+        148 Cambrault                            80                             
+        149 Zlotkey                              80                             
+        150 Tucker                               80                             
+        151 Bernstein                            80                             
+        152 Hall                                 80                             
+        153 Olsen                                80                             
+        154 Cambrault                            80                             
+
+EMPLOYEE_ID employee                  DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        155 Tuvault                              80                             
+        156 King                                 80                             
+        157 Sully                                80                             
+        158 McEwen                               80                             
+        159 Smith                                80                             
+        160 Doran                                80                             
+        161 Sewall                               80                             
+        162 Vishney                              80                             
+        163 Greene                               80                             
+        164 Marvins                              80                             
+        165 Lee                                  80                             
+
+EMPLOYEE_ID employee                  DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        166 Ande                                 80                             
+        167 Banda                                80                             
+        168 Ozer                                 80                             
+        169 Bloom                                80                             
+        170 Fox                                 999                             
+        171 Smith                                80                             
+        172 Bates                                80                             
+        173 Kumar                                80                             
+        174 Abel                                 80                             
+        175 Hutton                               80                             
+        176 Taylor                               80                             
+
+EMPLOYEE_ID employee                  DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        177 Livingston                           80                             
+        178 Grant                                                               
+        179 Johnson                              80                             
+        180 Taylor                               50                             
+        181 Fleaur                               50                             
+        182 Sullivan                             50                             
+        183 Geoni                                50                             
+        184 Sarchand                             50                             
+        185 Bull                                 50                             
+        186 Dellinger                            50                             
+        187 Cabrio                               50                             
+
+EMPLOYEE_ID employee                  DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        188 Chung                                50                             
+        189 Dilly                                50                             
+        190 Gates                                50                             
+        191 Perkins                              50                             
+        192 Bell                                 50                             
+        193 Everett                              50                             
+        194 McCain                               50                             
+        195 Jones                                50                             
+        196 Walsh                                50                             
+        197 Feeney                               50                             
+        198 OConnell                             50                             
+
+EMPLOYEE_ID employee                  DEPARTMENT_ID                             
+----------- ------------------------- -------------                             
+        199 Grant                                50                             
+        200 Whalen                               10                             
+        201 Hartstein                            20                             
+        202 Fay                                  20                             
+        203 Mavris                               40                             
+        204 Baer                                 70                             
+        205 Higgins                             110                             
+        206 Gietz                               110                             
+
+107 rows selected.
+
+SQL> select employee,department_id
+  2  from employees_vu;
+select employee,department_id
+       *
+ERROR at line 1:
+ORA-00904: "EMPLOYEE": invalid identifier 
+
+
+SQL> select last_name "employee",department_id
+  2  from employees_vu;
+select last_name "employee",department_id
+       *
+ERROR at line 1:
+ORA-00904: "LAST_NAME": invalid identifier 
+
+
+SQL> select employee,department_id
+  2  from employees_vu;
+select employee,department_id
+       *
+ERROR at line 1:
+ORA-00904: "EMPLOYEE": invalid identifier 
+
+
+SQL> create view dept50 as
+  2  select employee_id empno,last_name employee,department_id deptno
+  3  from employees
+  4  where department_id=50
+  5  with check option constraint emp_dept_50;
+
+View created.
+
+SQL> desc dept50;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                     NOT NULL NUMBER(6)
+ EMPLOYEE                                  NOT NULL VARCHAR2(25)
+ DEPTNO                                             NUMBER(4)
+
+SQL> select * from dept50;
+
+     EMPNO EMPLOYEE                      DEPTNO                                 
+---------- ------------------------- ----------                                 
+       120 Weiss                             50                                 
+       121 Fripp                             50                                 
+       122 Kaufling                          50                                 
+       123 Vollman                           50                                 
+       124 Mourgos                           50                                 
+       125 Nayer                             50                                 
+       126 Mikkilineni                       50                                 
+       127 Landry                            50                                 
+       128 Markle                            50                                 
+       129 Bissot                            50                                 
+       130 Atkinson                          50                                 
+
+     EMPNO EMPLOYEE                      DEPTNO                                 
+---------- ------------------------- ----------                                 
+       131 Marlow                            50                                 
+       132 Olson                             50                                 
+       133 Mallin                            50                                 
+       134 Rogers                            50                                 
+       135 Gee                               50                                 
+       136 Philtanker                        50                                 
+       137 Ladwig                            50                                 
+       138 Stiles                            50                                 
+       139 Seo                               50                                 
+       140 Patel                             50                                 
+       141 Rajs                              50                                 
+
+     EMPNO EMPLOYEE                      DEPTNO                                 
+---------- ------------------------- ----------                                 
+       142 Davies                            50                                 
+       143 Matos                             50                                 
+       144 Vargas                            50                                 
+       180 Taylor                            50                                 
+       181 Fleaur                            50                                 
+       182 Sullivan                          50                                 
+       183 Geoni                             50                                 
+       184 Sarchand                          50                                 
+       185 Bull                              50                                 
+       186 Dellinger                         50                                 
+       187 Cabrio                            50                                 
+
+     EMPNO EMPLOYEE                      DEPTNO                                 
+---------- ------------------------- ----------                                 
+       188 Chung                             50                                 
+       189 Dilly                             50                                 
+       190 Gates                             50                                 
+       191 Perkins                           50                                 
+       192 Bell                              50                                 
+       193 Everett                           50                                 
+       194 McCain                            50                                 
+       195 Jones                             50                                 
+       196 Walsh                             50                                 
+       197 Feeney                            50                                 
+       198 OConnell                          50                                 
+
+     EMPNO EMPLOYEE                      DEPTNO                                 
+---------- ------------------------- ----------                                 
+       199 Grant                             50                                 
+
+45 rows selected.
+
+SQL> update dept50
+  2  set deptno=80
+  3  where employee='matos';
+
+0 rows updated.
+
+SQL> spool off
